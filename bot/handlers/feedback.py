@@ -16,19 +16,7 @@ MESSAGE = "<b>Message from:</b> <code>{}</code>\n<b>Name:</b> <a href='tg://user
 
 
 # ADDING HANDLERS
-def add_feedback_handlers(bot):
-    bot.add_handler(
-        CommandHandler(command="start", callback=start, filters=Filters.chat_type.private, run_async=True)
-    )
-
-    bot.add_handler(
-        CommandHandler(command="about", callback=about, filters=Filters.chat_type.private, run_async=True)
-    )
-
-    bot.add_handler(
-        CallbackQueryHandler(pattern="about", callback=about, run_async=True)
-    )
-
+def add_feedback_handlers(bot):      
     bot.add_handler(
         MessageHandler(filters=Filters.chat(OWNER_ID), callback=reply, run_async=True)
     )
@@ -37,36 +25,7 @@ def add_feedback_handlers(bot):
         MessageHandler(filters=Filters.chat_type.private, callback=user, run_async=True)
     )
 
-
-
-
-
 #***************HANDLERS BELOW******************
-
-def start(update, context):
-    context.bot.send_message(
-        chat_id = OWNER_ID,
-        text = LOG_TEXT.format(update.message.chat.id,update.message.chat.id,update.message.chat.first_name,"" if update.message.chat.last_name == None else " "+update.message.chat.last_name),
-        parse_mode = "html"
-    )
-    inline_keyboard = [[InlineKeyboardButton("💬GROUP💬", url = f"{vars.GROUP_LINK}"), InlineKeyboardButton("📢CHANNEL📢", url = f"{vars.CHANNEL_LINK}")], [InlineKeyboardButton("❗ABOUT❗", callback_data="about")]]
-    update.message.reply_text(
-        "*Hi {}!*\n".format(update.message.chat.first_name)+START_TEXT,
-        reply_markup = InlineKeyboardMarkup(inline_keyboard),
-        parse_mode = "markdown"
-    )
-
-def about(update, context):
-    bot_details = context.bot.get_me()
-    if update.message is not None:
-        message = update.message
-    else:
-        message = update.callback_query.message
-    message.reply_text(
-        "*My Name: [{}](tg://user?id={})\nSource: [Feedback\-and\-Request\-Bot\-TG](https://github.com/skr1405/Feedback\-and\-Request\-Bot\-TG)*".format(bot_details.first_name, bot_details.id),
-        parse_mode = "markdownv2",
-        disable_web_page_preview = True
-    )
 
 def reply(update, context):
     if update.message.reply_to_message is not None:
